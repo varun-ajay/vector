@@ -21,23 +21,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(
-            @Valid @RequestBody RegisterRequest request) {
-
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequest request) {
         authService.register(request);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "User registered successfully"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User registered successfully"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(
-            @Valid @RequestBody LoginRequest request) {
-
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest request) {
         authService.login(request.getEmail(), request.getPassword());
-
-        return ResponseEntity.ok(
-                Map.of("message", "Login successful")
-        );
+        return ResponseEntity.ok(Map.of("message", "Login successful"));
     }
 }
