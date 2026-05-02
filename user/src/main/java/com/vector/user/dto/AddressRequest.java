@@ -9,9 +9,6 @@ import java.util.UUID;
 
 public class AddressRequest {
 
-    @NotNull
-    private UUID userId;
-
     private String name;
 
     @NotBlank
@@ -33,7 +30,6 @@ public class AddressRequest {
 
     private Boolean isDefault = false;
 
-    public UUID getUserId() { return userId; }
     public String getName() { return name; }
     public String getStreet() { return street; }
     public String getCity() { return city; }

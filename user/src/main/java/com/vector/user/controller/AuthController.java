@@ -2,6 +2,8 @@ package com.vector.user.controller;
 
 import com.vector.user.dto.LoginRequest;
 import com.vector.user.dto.RegisterRequest;
+import com.vector.user.entity.User;
+import com.vector.user.security.JwtUtil;
 import com.vector.user.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,10 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-
-    public AuthController(AuthService authService) {
+    private final JwtUtil jwtUtil;
+    public AuthController(AuthService authService, JwtUtil jwtUtil) {
         this.authService = authService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -28,7 +31,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest request) {
-        authService.login(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok(Map.of("message", "Login successful"));
+        User user = authService.login(request.getEmail(), request.getPassword());
+        String token = jwtUtil.generateToken(user.getId().toString());
+        return ResponseEntity.ok(
+                Map.of(
+                        "message", "Login successful",
+                        "token", token
+                )
+        );
     }
 }
